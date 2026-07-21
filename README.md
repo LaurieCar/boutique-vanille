@@ -63,10 +63,11 @@ Projet réalisé dans le cadre d'un TP de groupe (ESGI).
    php bin/console doctrine:migrations:migrate
    ```
 
-6. **Charger les fixtures** *(à venir — pas encore implémentées)*
+6. **Charger les fixtures** (données de démo : 3 catégories, 12 produits)
    ```bash
    php bin/console doctrine:fixtures:load
    ```
+   ⚠️ Cette commande **vide et recrée** les tables à chaque exécution — à relancer si vos données de test sont dans un état incohérent.
 
 ## Lancer le projet en local
 
@@ -105,10 +106,10 @@ php bin/phpunit
 
 - [x] Socle Symfony + PostgreSQL configuré
 - [x] Intégration Tailwind CSS via AssetMapper
-- [ ] Layout de base (header/footer/navigation)
-- [ ] Entités `Category` / `Product` + migrations
-- [ ] Upload images/vidéos (VichUploaderBundle)
-- [ ] Fixtures (catégories + produits)
+- [x] Layout de base (header/footer/navigation)
+- [x] Entités `Category` / `Product` + migrations
+- [x] Upload images/vidéos (VichUploaderBundle) — bundle configuré, pas encore utilisé dans un formulaire
+- [x] Fixtures (3 catégories, 12 produits — sans image/vidéo pour l'instant)
 - [ ] Page catalogue avec filtrage par catégorie
 - [ ] Page détail produit
 - [ ] Panier en session + vérification du stock
