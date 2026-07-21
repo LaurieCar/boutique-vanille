@@ -18,3 +18,10 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> vich/uploader-bundle ###
+/public/uploads/products/images/*
+/public/uploads/products/videos/*
+!/public/uploads/products/images/.gitkeep
+!/public/uploads/products/videos/.gitkeep
+###< vich/uploader-bundle ###
