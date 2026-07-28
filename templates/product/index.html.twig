@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos produits{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl font-bold text-amber-900 mb-6">Nos produits</h1>
+
+    <div class="flex flex-wrap gap-2 mb-8">
+        <a href="{{ path('app_product_index') }}"
+           class="px-3 py-1 rounded-full text-sm font-medium {{ categorieActive is null ? 'bg-amber-900 text-amber-50' : 'bg-white text-stone-700 border border-stone-300' }}">
+            Tous
+        </a>
+        {% for category in categories %}
+            <a href="{{ path('app_product_index', {categorie: category.slug}) }}"
+               class="px-3 py-1 rounded-full text-sm font-medium {{ categorieActive == category.slug ? 'bg-amber-900 text-amber-50' : 'bg-white text-stone-700 border border-stone-300' }}">
+                {{ category.nom }}
+            </a>
+        {% endfor %}
+    </div>
+
+    {% if products is empty %}
+        <p class="text-stone-500">Aucun produit trouvé pour cette catégorie.</p>
+    {% else %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for product in products %}
+                <a href="{{ path('app_product_show', {slug: product.slug}) }}"
+                   class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition">
+                    <div class="aspect-square bg-amber-100 flex items-center justify-center">
+                        {% if product.imagePrincipale %}
+                            <img src="{{ asset('uploads/products/images/' ~ product.imagePrincipale) }}"
+                                 alt="{{ product.nom }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <span class="text-amber-400 text-sm">Pas d'image</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="p-4">
+                        <h2 class="font-semibold text-stone-800">{{ product.nom }}</h2>
+                        <p class="text-amber-900 font-bold mt-1">{{ (product.prix / 100)|number_format(2, ',', ' ') }} €</p>
+
+                        {% if product.stock <= 0 %}
+                            <span class="inline-block mt-2 text-xs font-medium text-red-700 bg-red-100 px-2 py-1 rounded">
+                                Rupture de stock
+                            </span>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

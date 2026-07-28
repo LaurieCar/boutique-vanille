@@ -6,9 +6,17 @@ use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AppFixtures extends Fixture
 {
+    private string $mediaDir;
+
+    public function __construct(string $projectDir)
+    {
+        $this->mediaDir = $projectDir.'/assets/fixtures_media/';
+    }
+
     public function load(ObjectManager $manager): void
     {
         $categories = [];
@@ -34,6 +42,7 @@ class AppFixtures extends Fixture
                 'prix' => 1290,
                 'stock' => 25,
                 'categorie' => 'vanille',
+                'image' => 'vanille_madagascar.png',
             ],
             [
                 'nom' => 'Vanille de Tahiti',
@@ -42,6 +51,7 @@ class AppFixtures extends Fixture
                 'prix' => 1450,
                 'stock' => 15,
                 'categorie' => 'vanille',
+                'image' => 'vanille_tahiti.png',
             ],
             [
                 'nom' => 'Vanille en poudre',
@@ -50,6 +60,7 @@ class AppFixtures extends Fixture
                 'prix' => 990,
                 'stock' => 30,
                 'categorie' => 'vanille',
+                'image' => 'vanille_poudre.png',
             ],
             [
                 'nom' => 'Extrait de vanille naturel',
@@ -58,6 +69,7 @@ class AppFixtures extends Fixture
                 'prix' => 850,
                 'stock' => 0,
                 'categorie' => 'vanille',
+                'image' => 'vanille_extrait.png',
             ],
             [
                 'nom' => 'Cannelle de Ceylan',
@@ -66,6 +78,7 @@ class AppFixtures extends Fixture
                 'prix' => 690,
                 'stock' => 40,
                 'categorie' => 'epices',
+                'image' => 'canelle_ceylan.png',
             ],
             [
                 'nom' => 'Poivre de Voatsiperifery',
@@ -74,6 +87,7 @@ class AppFixtures extends Fixture
                 'prix' => 1190,
                 'stock' => 18,
                 'categorie' => 'epices',
+                'image' => 'poivre_voatsiperifery.png',
             ],
             [
                 'nom' => 'Cardamome verte',
@@ -82,6 +96,7 @@ class AppFixtures extends Fixture
                 'prix' => 790,
                 'stock' => 22,
                 'categorie' => 'epices',
+                'image' => 'cardamome_verte.png',
             ],
             [
                 'nom' => 'Girofle entier',
@@ -90,6 +105,7 @@ class AppFixtures extends Fixture
                 'prix' => 590,
                 'stock' => 35,
                 'categorie' => 'epices',
+                'image' => 'girofle_entier.png',
             ],
             [
                 'nom' => 'Sirop de vanille',
@@ -98,6 +114,7 @@ class AppFixtures extends Fixture
                 'prix' => 750,
                 'stock' => 20,
                 'categorie' => 'sirops-produits-derives',
+                'image' => 'sirop_vanille.png',
             ],
             [
                 'nom' => 'Sucre vanillé artisanal',
@@ -106,6 +123,7 @@ class AppFixtures extends Fixture
                 'prix' => 495,
                 'stock' => 50,
                 'categorie' => 'sirops-produits-derives',
+                'image' => 'sucre_vanille.png',
             ],
             [
                 'nom' => 'Miel à la vanille',
@@ -114,6 +132,7 @@ class AppFixtures extends Fixture
                 'prix' => 890,
                 'stock' => 12,
                 'categorie' => 'sirops-produits-derives',
+                'image' => 'miel_vanille.png',
             ],
             [
                 'nom' => 'Coffret découverte exotique',
@@ -122,6 +141,7 @@ class AppFixtures extends Fixture
                 'prix' => 2490,
                 'stock' => 8,
                 'categorie' => 'sirops-produits-derives',
+                'image' => 'coffret_decouverte_exotique.png',
             ],
         ] as $data) {
             $product = new Product();
@@ -131,6 +151,21 @@ class AppFixtures extends Fixture
             $product->setPrix($data['prix']);
             $product->setStock($data['stock']);
             $product->setCategorie($categories[$data['categorie']]);
+
+            if (isset($data['image'])) {
+                $sourcePath = $this->mediaDir.$data['image'];
+
+                if (is_file($sourcePath)) {
+                    // Vich moves the uploaded file, so we hand it a disposable copy
+                    // and keep the original in assets/fixtures_media/ intact for future reloads.
+                    $tmpPath = sys_get_temp_dir().'/'.uniqid('fixture_', true).'.'.pathinfo($sourcePath, \PATHINFO_EXTENSION);
+                    copy($sourcePath, $tmpPath);
+
+                    $product->setImageFile(new UploadedFile($tmpPath, $data['image'], test: true));
+                } else {
+                    echo \sprintf("  [!] Image manquante, ignorée : %s\n", $sourcePath);
+                }
+            }
 
             $manager->persist($product);
         }
