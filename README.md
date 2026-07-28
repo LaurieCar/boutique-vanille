@@ -108,10 +108,11 @@ php bin/phpunit
 - [x] Intégration Tailwind CSS via AssetMapper
 - [x] Layout de base (header/footer/navigation)
 - [x] Entités `Category` / `Product` + migrations
-- [x] Upload images/vidéos (VichUploaderBundle) — bundle configuré, pas encore utilisé dans un formulaire
-- [x] Fixtures (3 catégories, 12 produits — sans image/vidéo pour l'instant)
-- [ ] Page catalogue avec filtrage par catégorie
-- [ ] Page détail produit
+- [x] Upload images/vidéos (VichUploaderBundle) — mappings configurés, câblé dans les fixtures (formulaire d'upload admin à venir)
+- [x] Fixtures (3 catégories, 12 produits, images réelles — vidéos pas encore ajoutées)
+- [x] Page catalogue avec filtrage par catégorie (`/produits`)
+- [x] Page détail produit (`/produits/{slug}`)
+- [x] Page Recettes avec vidéos YouTube (`/recettes`)
 - [ ] Panier en session + vérification du stock
 - [ ] Intégration Stripe Checkout + webhook
 - [ ] Authentification (inscription / connexion)

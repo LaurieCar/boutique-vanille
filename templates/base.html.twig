@@ -23,11 +23,12 @@
         <header class="bg-amber-900 text-amber-50">
             <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
                 <a href="/" class="text-xl font-bold tracking-wide">
-                    Vanille &amp; Épices Exotiques
+                    La Boutique Vanille
                 </a>
 
                 <nav class="flex items-center gap-6 text-sm font-medium">
                     <a href="{{ path('app_product_index') }}" class="hover:text-amber-200 transition">Produits</a>
+                    <a href="{{ path('app_recipe_index') }}" class="hover:text-amber-200 transition">Recettes</a>
                     <a href="/panier" class="hover:text-amber-200 transition">Panier</a>
                     <a href="/connexion" class="hover:text-amber-200 transition">Connexion</a>
                 </nav>
@@ -40,7 +41,7 @@
 
         <footer class="bg-amber-900 text-amber-50 text-sm">
             <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between gap-2">
-                <p>&copy; {{ "now"|date("Y") }} Vanille &amp; Épices Exotiques. Tous droits réservés.</p>
+                <p>&copy; {{ "now"|date("Y") }} La Boutique Vanille. Tous droits réservés.</p>
             </div>
         </footer>
     </body>
