@@ -39,7 +39,8 @@
             {% else %}
                 <p class="text-sm text-stone-500 mt-6">{{ product.stock }} en stock</p>
 
-                <form action="/panier/ajouter/{{ product.id }}" method="post" class="flex items-center gap-3 mt-4">
+                <form action="{{ path('app_cart_add', {id: product.id}) }}" method="post" class="flex items-center gap-3 mt-4">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
                     <input type="number" name="quantite" value="1" min="1" max="{{ product.stock }}"
                            class="w-20 border border-stone-300 rounded px-2 py-1">
                     <button type="submit"
