@@ -22,6 +22,10 @@ class Commande
     #[Assert\Email]
     private ?string $email = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
     #[ORM\Column(length: 20, enumType: CommandeStatut::class)]
     private CommandeStatut $statut = CommandeStatut::EN_ATTENTE;
 
@@ -62,6 +66,18 @@ class Commande
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

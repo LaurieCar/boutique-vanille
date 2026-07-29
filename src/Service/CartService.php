@@ -105,6 +105,20 @@ class CartService
     }
 
     /**
+     * Nombre total d'articles (quantités cumulées), affiché en pastille dans la navbar.
+     */
+    public function getItemCount(): int
+    {
+        $count = 0;
+
+        foreach ($this->getItems() as $item) {
+            $count += $item['quantite'];
+        }
+
+        return $count;
+    }
+
+    /**
      * Items dont la quantité en panier dépasse le stock actuellement disponible.
      * À vérifier juste avant de lancer un paiement : le panier a pu rester ouvert
      * longtemps, ou un autre client a pu acheter les dernières unités entre-temps.

@@ -67,6 +67,9 @@ final class CheckoutController extends AbstractController
         $commande = new Commande();
         $commande->setEmail($email);
         $commande->setStatut(CommandeStatut::EN_ATTENTE);
+        if ($this->getUser()) {
+            $commande->setUser($this->getUser());
+        }
 
         $total = 0;
         foreach ($cart->getItems() as $item) {
