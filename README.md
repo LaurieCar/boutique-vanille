@@ -137,27 +137,19 @@ Dans le terminal `stripe listen`, l'événement `checkout.session.completed` doi
 
 ## Tests
 
-```bash
-php bin/console --env=test doctrine:database:create
-php bin/console --env=test doctrine:migrations:migrate
-php bin/phpunit
-```
+Les tests utilisent une base **SQLite** dédiée (pas PostgreSQL), pour rester simples et ne jamais toucher à la base de développement.
 
-## Avancement du projet
+1. Créer `.env.test.local` (non versionné) :
+   ```
+   DATABASE_URL="sqlite:///%kernel.project_dir%/var/data_test.db"
+   ```
+2. Construire le schéma de test à partir des entités (pas de migrations, elles contiennent du SQL spécifique PostgreSQL) :
+   ```bash
+   php bin/console --env=test doctrine:schema:create
+   ```
+3. Lancer les tests :
+   ```bash
+   php bin/phpunit
+   ```
 
-- [x] Socle Symfony + PostgreSQL configuré
-- [x] Intégration Tailwind CSS via AssetMapper
-- [x] Layout de base (header/footer/navigation)
-- [x] Entités `Category` / `Product` + migrations
-- [x] Upload images/vidéos (VichUploaderBundle) — mappings configurés, câblé dans les fixtures (formulaire d'upload admin à venir)
-- [x] Fixtures (3 catégories, 12 produits, images réelles — vidéos pas encore ajoutées)
-- [x] Page catalogue avec filtrage par catégorie (`/produits`)
-- [x] Page détail produit (`/produits/{slug}`)
-- [x] Page Recettes avec vidéos YouTube (`/recettes`)
-- [x] Panier en session + vérification du stock
-- [x] Authentification (inscription / connexion / mot de passe oublié)
-- [x] Intégration Stripe Checkout + webhook (testé de bout en bout avec Stripe CLI)
-- [x] Back-office admin EasyAdmin (CRUD produits/catégories, liste des commandes)
-- [ ] Espace client (historique des commandes)
-- [ ] Responsive design
-- [ ] Tests PHPUnit fonctionnels
+3 tests fonctionnels minimaux (catalogue accessible, accès admin refusé sans rôle, ajout au panier)
