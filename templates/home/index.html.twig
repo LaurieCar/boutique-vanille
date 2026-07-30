@@ -3,10 +3,72 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <section class="text-center py-16">
-        <h1 class="text-4xl font-bold text-amber-900 mb-4">Vanille &amp; Épices Exotiques</h1>
-        <p class="text-lg text-stone-600 max-w-xl mx-auto">
-            Vanille de Madagascar, de Tahiti, épices et produits dérivés, sélectionnés et préparés avec soin.
-        </p>
+    <section class="relative left-1/2 -translate-x-1/2 -mt-8 w-screen min-h-[75vh] flex items-center justify-center text-center bg-cover bg-center"
+              style="background-image: url('{{ asset('images/home/hero-plage-coucher-soleil.png') }}');">
+        <div class="absolute inset-0 bg-black/50"></div>
+
+        <div class="relative z-10 px-4 text-white">
+            <h1 class="text-4xl sm:text-5xl font-bold tracking-wide mb-4">La Boutique Vanille</h1>
+            <p class="text-lg sm:text-xl text-amber-50 max-w-xl mx-auto mb-8">
+                Vanille, épices et saveurs exotiques, sélectionnées à la source et préparées avec soin.
+            </p>
+            <a href="{{ path('app_product_index') }}"
+               class="inline-block bg-amber-900 hover:bg-amber-800 transition text-amber-50 font-semibold px-6 py-3 rounded-full">
+                Découvrir nos produits
+            </a>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-16">
+        <div class="aspect-4/3 rounded-2xl overflow-hidden shadow-lg">
+            <img src="{{ asset('images/home/lagon-aerien.png') }}" alt="Lagon vu du ciel"
+                 class="w-full h-full object-cover">
+        </div>
+        <div>
+            <p class="text-sm text-amber-700 font-medium uppercase tracking-wide mb-2">Nos origines</p>
+            <h2 class="text-2xl font-bold text-stone-800 mb-4">Des îles jusqu'à votre cuisine</h2>
+            <p class="text-stone-600 leading-relaxed">
+                Nos gousses de vanille et nos épices sont récoltées à Madagascar, à Tahiti et dans les îles
+                voisines, là où les sols volcaniques et le climat tropical donnent des arômes incomparables.
+            </p>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-16">
+        <div class="md:order-2 aspect-4/3 rounded-2xl overflow-hidden shadow-lg">
+            <img src="{{ asset('images/home/cascade-vanille.png') }}" alt="Fleur et gousses de vanille"
+                 class="w-full h-full object-cover">
+        </div>
+        <div class="md:order-1">
+            <p class="text-sm text-amber-700 font-medium uppercase tracking-wide mb-2">Le savoir-faire</p>
+            <h2 class="text-2xl font-bold text-stone-800 mb-4">De la fleur à la gousse noire</h2>
+            <p class="text-stone-600 leading-relaxed">
+                Chaque gousse est pollinisée à la main, séchée et affinée pendant plusieurs mois selon les
+                méthodes traditionnelles, pour révéler tout son parfum avant d'arriver jusqu'à vous.
+            </p>
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center py-16">
+        <div class="aspect-4/3 rounded-2xl overflow-hidden shadow-lg">
+            <img src="{{ asset('images/home/marche-epices.png') }}" alt="Marché aux épices"
+                 class="w-full h-full object-cover">
+        </div>
+        <div>
+            <p class="text-sm text-amber-700 font-medium uppercase tracking-wide mb-2">Nos producteurs</p>
+            <h2 class="text-2xl font-bold text-stone-800 mb-4">Des producteurs locaux, en direct</h2>
+            <p class="text-stone-600 leading-relaxed">
+                Nous travaillons directement avec des producteurs locaux pour garantir des produits
+                authentiques, sans intermédiaire superflu, au plus près du terroir.
+            </p>
+        </div>
+    </section>
+
+    <section class="text-center py-16 border-t border-stone-200">
+        <h2 class="text-2xl font-bold text-stone-800 mb-4">Prêt à explorer nos saveurs ?</h2>
+        <a href="{{ path('app_product_index') }}"
+           class="inline-block bg-amber-900 hover:bg-amber-800 transition text-amber-50 font-semibold px-6 py-3 rounded-full">
+            Voir le catalogue
+        </a>
     </section>
 {% endblock %}
