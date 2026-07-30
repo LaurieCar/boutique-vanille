@@ -39,7 +39,7 @@
                                 {{ app.user.prenom }}
                             </span>
                         </a>
-                        <a href="{{ path('app_logout') }}" class="hover:text-amber-200 transition">Déconnexion</a>
+                        <a href="{{ path('app_logout') }}" data-turbo-prefetch="false" class="hover:text-amber-200 transition">Déconnexion</a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="hover:text-amber-200 transition">Connexion</a>
                     {% endif %}
