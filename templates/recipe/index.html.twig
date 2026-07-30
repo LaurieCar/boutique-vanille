@@ -1,27 +1,110 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recettes{% endblock %}
+{% block title %}Recettes à la vanille{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl font-bold text-amber-900 mb-2">Recettes</h1>
-    <p class="text-stone-600 mb-8">Quelques idées pour cuisiner nos produits, en vidéo.</p>
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-amber-900 mb-2">Nos recettes</h1>
+        <p class="text-stone-600">Découvrez nos idées gourmandes pour cuisiner nos produits.</p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for recipe in recipes %}
-            <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
-                <div class="aspect-video">
-                    <iframe class="w-full h-full"
-                            src="https://www.youtube.com/embed/{{ recipe.youtubeId }}"
-                            title="{{ recipe.titre }}"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
-                </div>
-                <div class="p-4">
-                    <h2 class="font-semibold text-stone-800">{{ recipe.titre }}</h2>
-                    <p class="text-sm text-stone-600 mt-1">{{ recipe.description }}</p>
-                </div>
-            </div>
+    <div class="flex flex-wrap gap-2 mb-8" id="recipe-filters">
+        <button data-category="all"
+                class="px-4 py-1.5 rounded-full text-sm font-medium bg-amber-900 text-amber-50 transition active-filter">
+            Toutes
+        </button>
+        {% for categorie in categories %}
+            <button data-category="{{ categorie|lower }}"
+                    class="px-4 py-1.5 rounded-full text-sm font-medium bg-white text-stone-700 border border-stone-300 hover:bg-amber-100 hover:border-amber-300 transition">
+                {{ categorie }}
+            </button>
         {% endfor %}
     </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="recipe-grid">
+        {% for recipe in recipes %}
+            <a href="{{ path('app_recipe_show', {slug: recipe.slug }) }}"
+               class="recipe-card bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition block group"
+               data-category="{{ recipe.categorie|lower }}">
+
+                <div class="aspect-video bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center relative overflow-hidden">
+                    <svg class="w-16 h-16 text-amber-400/60 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"/>
+                    </svg>
+                    <div class="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/10 transition-colors"></div>
+                    <span class="absolute top-3 left-3 bg-white/90 text-amber-900 text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
+                        {{ recipe.categorie }}
+                    </span>
+                    {% if recipe.difficulte %}
+                        <span class="absolute top-3 right-3 bg-white/90 text-stone-700 text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
+                            {{ recipe.difficulte }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="p-4">
+                    <h2 class="font-semibold text-stone-800 group-hover:text-amber-900 transition-colors">{{ recipe.titre }}</h2>
+                    <p class="text-sm text-stone-600 mt-1 line-clamp-2">{{ recipe.description }}</p>
+
+                    <div class="flex items-center gap-4 mt-3 text-xs text-stone-500">
+                        {% if recipe.tempsPreparation %}
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                {{ recipe.tempsPreparation }} min
+                            </span>
+                        {% endif %}
+                        {% if recipe.tempsCuisson %}
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                                </svg>
+                                {{ recipe.tempsCuisson }} min
+                            </span>
+                        {% endif %}
+                        {% if recipe.ingredients %}
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                {{ recipe.ingredients|length }} ingrédients
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function() {
+            const filters = document.querySelectorAll('#recipe-filters button');
+            const cards = document.querySelectorAll('#recipe-grid .recipe-card');
+
+            filters.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filters.forEach(b => {
+                        b.classList.remove('bg-amber-900', 'text-amber-50');
+                        b.classList.add('bg-white', 'text-stone-700', 'border', 'border-stone-300');
+                    });
+                    this.classList.add('bg-amber-900', 'text-amber-50');
+                    this.classList.remove('bg-white', 'text-stone-700', 'border', 'border-stone-300');
+
+                    const category = this.dataset.category;
+
+                    cards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
 {% endblock %}
