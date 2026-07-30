@@ -9,7 +9,7 @@ Projet réalisé dans le cadre d'un TP de groupe (ESGI).
 | Composant | Choix |
 |---|---|
 | Framework | Symfony 7.4 LTS |
-| PHP | 8.3 ou 8.4 (voir note ci-dessous) |
+| PHP | 8.3 ou 8.4 |
 | Base de données | PostgreSQL |
 | ORM | Doctrine ORM 3.x + Doctrine Migrations |
 | Templates | Twig 3.x |
@@ -20,15 +20,13 @@ Projet réalisé dans le cadre d'un TP de groupe (ESGI).
 | Paiement | Stripe (`stripe/stripe-php`, Stripe Checkout) |
 | Tests | PHPUnit |
 
-> **Note PHP** : le cahier des charges impose PHP 8.3 ou 8.4. L'environnement de développement actuel tourne en 8.2.12 — à aligner sur 8.3+ si possible avant la mise en production ou la soutenance.
-
 ## Prérequis
 
 - PHP 8.3+ (extensions : `ctype`, `iconv`)
 - Composer 2.x
 - PostgreSQL 13+ installé et démarré en local
 - [Symfony CLI](https://symfony.com/download) (recommandé pour `symfony serve`)
-- [Stripe CLI](https://docs.stripe.com/stripe-cli) (pour tester le webhook en local, voir plus bas)
+- [Stripe CLI](https://docs.stripe.com/stripe-cli) (pour tester le webhook en local)
 
 ## Installation
 
@@ -67,7 +65,7 @@ Projet réalisé dans le cadre d'un TP de groupe (ESGI).
    ```bash
    php bin/console doctrine:fixtures:load
    ```
-   ⚠️ Cette commande **vide et recrée** les tables à chaque exécution — à relancer si vos données de test sont dans un état incohérent.
+   Cette commande **vide et recrée** les tables à chaque exécution — à relancer si vos données de test sont dans un état incohérent.
 
 ## Travail en groupe : après chaque `git pull`
 
@@ -83,8 +81,6 @@ Le projet évolue en parallèle sur plusieurs machines. Après avoir récupéré
    php bin/console doctrine:migrations:migrate
    ```
 
-Oublier ces deux étapes est la cause la plus fréquente d'erreurs du type "classe introuvable" ou "colonne/table inexistante" après un pull.
-
 ## Lancer le projet en local
 
 Le projet nécessite **deux processus en parallèle** pendant le développement :
@@ -99,16 +95,45 @@ php bin/console tailwind:build --watch
 symfony serve
 ```
 
-Le site est ensuite accessible sur `http://localhost:8000`.
+Le site est ensuite accessible sur `https://localhost:8000` (Symfony CLI sert en HTTPS avec un certificat local auto-signé).
 
-## Configuration Stripe *(à venir)*
+## Configuration et test de Stripe
 
-Cette section sera complétée lors de l'intégration du paiement. Elle décrira :
-- les variables `STRIPE_PUBLIC_KEY` / `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` à ajouter dans `.env.local` (clés de **test** uniquement, jamais en dur dans le code)
-- l'utilisation du Stripe CLI pour recevoir les webhooks en local :
-  ```bash
-  stripe listen --forward-to localhost:8000/webhook/stripe
-  ```
+### 1. Récupérer des clés de test
+
+Demander les clés Stripe de **test** de l'équipe (`pk_test_...` / `sk_test_...`), ou en créer sur [dashboard.stripe.com](https://dashboard.stripe.com) (mode test, gratuit). Les ajouter dans `.env.local` :
+```
+STRIPE_PUBLIC_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+```
+Ne jamais mettre de clés Stripe en dur dans le code ni dans `.env` (versionné) — uniquement dans `.env.local`.
+
+### 2. Installer le Stripe CLI
+
+Nécessaire pour recevoir les webhooks Stripe en local (Stripe ne peut pas contacter `localhost` directement depuis internet).
+```bash
+winget install --id Stripe.StripeCli -e
+```
+(ou voir [docs.stripe.com/stripe-cli](https://docs.stripe.com/stripe-cli) pour les autres OS). Ouvrir un **nouveau terminal** après l'installation.
+
+### 3. Lancer l'écoute du webhook
+
+Pas besoin de `stripe login` / compte personnel : on s'authentifie directement avec la clé secrète déjà en main. **Important** : `symfony serve` tourne en HTTPS, donc l'URL cible doit être en `https://` avec `--skip-verify` (certificat local auto-signé) :
+```bash
+stripe listen --api-key sk_test_... --forward-to https://localhost:8000/webhook/stripe --skip-verify
+```
+Ça affiche un `whsec_...` : vérifier qu'il correspond bien à `STRIPE_WEBHOOK_SECRET` dans `.env.local` (le mettre à jour sinon). Garder ce terminal ouvert pendant les tests — c'est un **3e processus** en plus de Tailwind et `symfony serve`.
+
+### 4. Tester un paiement
+
+Passer une commande sur le site et payer avec la carte de test Stripe :
+```
+Numéro : 4242 4242 4242 4242
+Date : n'importe quelle date future
+CVC : n'importe quel code à 3 chiffres
+```
+Dans le terminal `stripe listen`, l'événement `checkout.session.completed` doit recevoir un `200` (pas un `307` : signe que Stripe est bien redirigé vers l'HTTPS local). Vérifier ensuite dans `/admin` que la commande passe au statut "Payée" et que le stock du produit acheté a diminué.
 
 ## Tests
 
@@ -131,8 +156,8 @@ php bin/phpunit
 - [x] Page Recettes avec vidéos YouTube (`/recettes`)
 - [x] Panier en session + vérification du stock
 - [x] Authentification (inscription / connexion / mot de passe oublié)
-- [~] Intégration Stripe Checkout + webhook — en cours, clés de test à configurer
+- [x] Intégration Stripe Checkout + webhook (testé de bout en bout avec Stripe CLI)
+- [x] Back-office admin EasyAdmin (CRUD produits/catégories, liste des commandes)
 - [ ] Espace client (historique des commandes)
-- [ ] Back-office admin (CRUD produits, gestion commandes)
 - [ ] Responsive design
 - [ ] Tests PHPUnit fonctionnels

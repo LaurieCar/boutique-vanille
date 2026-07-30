@@ -31,10 +31,10 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/mon-compte, roles: ROLE_USER }
-        # consulter le panier nécessite d'être connecté ; ajouter/mettre à jour/supprimer
-        # un article reste possible sans compte (panier session classique)
+        # consulter le panier nécessite d'être connecté ; 
+        # ajouter/mettre à jour/supprimer un article reste possible sans compte (panier session classique)
         - { path: ^/panier$, roles: ROLE_USER }
-        # - { path: ^/admin, roles: ROLE_ADMIN } (réservé au back-office EasyAdmin)
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:
