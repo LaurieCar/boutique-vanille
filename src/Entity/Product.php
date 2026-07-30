@@ -141,6 +141,11 @@ class Product
         return $this;
     }
 
+    public function hasStock(int $quantite): bool
+    {
+        return $this->stock >= $quantite;
+    }
+
     public function getCategorie(): ?Category
     {
         return $this->categorie;

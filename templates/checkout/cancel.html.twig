@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement annulé{% endblock %}
+
+{% block body %}
+    <div class="max-w-lg mx-auto text-center py-12">
+        <h1 class="text-3xl font-bold text-stone-800 mb-4">Paiement annulé</h1>
+        <p class="text-stone-600">Votre panier a été conservé, vous pouvez réessayer quand vous le souhaitez.</p>
+
+        <a href="{{ path('app_cart_index') }}" class="text-amber-900 font-medium hover:underline mt-6 inline-block">
+            &larr; Retour au panier
+        </a>
+    </div>
+{% endblock %}

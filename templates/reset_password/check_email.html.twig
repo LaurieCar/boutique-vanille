@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérifiez vos e-mails{% endblock %}
+
+{% block body %}
+    <div class="max-w-sm mx-auto text-center">
+        <h1 class="text-2xl font-bold text-amber-900 mb-6">Vérifiez vos e-mails</h1>
+
+        <p class="text-sm text-stone-600">
+            Si un compte existe avec cet e-mail, un lien de réinitialisation vient de vous être envoyé.
+            Ce lien restera valable {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData) }}.
+        </p>
+
+        <a href="{{ path('app_login') }}" class="inline-block mt-6 text-amber-900 font-medium hover:underline">
+            Retour à la connexion
+        </a>
+    </div>
+{% endblock %}

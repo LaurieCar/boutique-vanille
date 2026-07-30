@@ -3,6 +3,30 @@
 {% block title %}{{ product.nom }}{% endblock %}
 
 {% block body %}
+    {% if app.request.query.get('ajout') %}
+        <div class="fixed inset-0 bg-stone-900/50 flex items-center justify-center z-50 px-4">
+            <div class="relative bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center">
+                <a href="{{ path('app_product_show', {slug: product.slug}) }}"
+                   class="absolute top-3 right-3 text-stone-400 hover:text-stone-600" aria-label="Fermer">
+                    &times;
+                </a>
+
+                <p class="text-lg font-semibold text-stone-800 mb-6">Produit ajouté au panier</p>
+
+                <div class="flex flex-col gap-3">
+                    <a href="{{ path('app_cart_index') }}"
+                       class="bg-amber-900 text-amber-50 font-medium px-4 py-2 rounded hover:bg-amber-800 transition">
+                        Consulter mon panier
+                    </a>
+                    <a href="{{ path('app_product_index') }}"
+                       class="border border-stone-300 text-stone-700 font-medium px-4 py-2 rounded hover:bg-stone-50 transition">
+                        Retour à la boutique
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <a href="{{ path('app_product_index') }}" class="text-amber-900 text-sm font-medium hover:underline">
         &larr; Retour au catalogue
     </a>
@@ -39,7 +63,8 @@
             {% else %}
                 <p class="text-sm text-stone-500 mt-6">{{ product.stock }} en stock</p>
 
-                <form action="/panier/ajouter/{{ product.id }}" method="post" class="flex items-center gap-3 mt-4">
+                <form action="{{ path('app_cart_add', {id: product.id}) }}" method="post" class="flex items-center gap-3 mt-4">
+                    <input type="hidden" name="_token" value="{{ csrf_token('cart') }}">
                     <input type="number" name="quantite" value="1" min="1" max="{{ product.stock }}"
                            class="w-20 border border-stone-300 rounded px-2 py-1">
                     <button type="submit"
