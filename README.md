@@ -69,6 +69,22 @@ Projet réalisé dans le cadre d'un TP de groupe (ESGI).
    ```
    ⚠️ Cette commande **vide et recrée** les tables à chaque exécution — à relancer si vos données de test sont dans un état incohérent.
 
+## Travail en groupe : après chaque `git pull`
+
+Le projet évolue en parallèle sur plusieurs machines. Après avoir récupéré des changements (`git pull`), toujours vérifier :
+
+1. **Dépendances PHP** (si `composer.json`/`composer.lock` a changé) :
+   ```bash
+   composer install
+   ```
+2. **Nouvelles migrations** (si de nouvelles entités/colonnes ont été ajoutées) :
+   ```bash
+   php bin/console doctrine:migrations:status
+   php bin/console doctrine:migrations:migrate
+   ```
+
+Oublier ces deux étapes est la cause la plus fréquente d'erreurs du type "classe introuvable" ou "colonne/table inexistante" après un pull.
+
 ## Lancer le projet en local
 
 Le projet nécessite **deux processus en parallèle** pendant le développement :
@@ -113,9 +129,9 @@ php bin/phpunit
 - [x] Page catalogue avec filtrage par catégorie (`/produits`)
 - [x] Page détail produit (`/produits/{slug}`)
 - [x] Page Recettes avec vidéos YouTube (`/recettes`)
-- [ ] Panier en session + vérification du stock
-- [ ] Intégration Stripe Checkout + webhook
-- [ ] Authentification (inscription / connexion)
+- [x] Panier en session + vérification du stock
+- [x] Authentification (inscription / connexion / mot de passe oublié)
+- [~] Intégration Stripe Checkout + webhook — en cours, clés de test à configurer
 - [ ] Espace client (historique des commandes)
 - [ ] Back-office admin (CRUD produits, gestion commandes)
 - [ ] Responsive design
