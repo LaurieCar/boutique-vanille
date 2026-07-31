@@ -28,9 +28,15 @@
                data-category="{{ recipe.categorie|lower }}">
 
                 <div class="aspect-video bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center relative overflow-hidden">
-                    <svg class="w-16 h-16 text-amber-400/60 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"/>
-                    </svg>
+                    {% if recipe.youtubeId %}
+                        <img src="https://img.youtube.com/vi/{{ recipe.youtubeId }}/hqdefault.jpg"
+                             alt="{{ recipe.titre }}" loading="lazy"
+                             class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                    {% else %}
+                        <svg class="w-16 h-16 text-amber-400/60 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m6-2a10 10 0 11-20 0 10 10 0 0120 0z"/>
+                        </svg>
+                    {% endif %}
                     <div class="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/10 transition-colors"></div>
                     <span class="absolute top-3 left-3 bg-white/90 text-amber-900 text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
                         {{ recipe.categorie }}
